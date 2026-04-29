@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NCAA D1 Lacrosse Bracket Challenge</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+    color: #111;
+  }
+  header {
+    background: #111;
+    color: #fff;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 24px; }
+  header p { margin: 0; opacity: .85; }
+  .controls {
+    max-width: 720px;
+    margin: 16px auto;
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  label { display: block; font-weight: bold; margin: 10px 0 6px; }
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  .hint { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.4; }
+  .submit {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 10px;
+    background: #111;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 16px;
+    cursor: pointer;
+  }
+  .submit:disabled { opacity: .55; cursor: not-allowed; }
+  .scroll-note {
+    max-width: 720px;
+    margin: 8px auto 0;
+    padding: 0 16px;
+    color: #555;
+    font-size: 14px;
+  }
+  .bracket-wrap {
+    overflow-x: auto;
+    padding: 12px 12px 30px;
+  }
+  .bracket {
+    display: flex;
+    gap: 22px;
+    min-width: 1120px;
+    align-items: flex-start;
+  }
+  .round { width: 200px; flex: 0 0 200px; }
+  .round h2 {
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  .game {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  }
+  .team {
+    padding: 10px;
+    min-height: 42px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 6px 0;
+    background: #fafafa;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+  }
+  .team:hover { background: #f0f0f0; }
+  .team.selected {
+    background: #111;
+    border-color: #111;
+    color: white;
+    font-weight: bold;
+  }
+  .team.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+    background: #f8f8f8;
+  }
+  .champion-card {
+    background: white;
+    border-radius: 12px;
+    border: 2px solid #111;
+    padding: 14px;
+    text-align: center;
+    margin-top: 48px;
+    min-height: 100px;
+  }
+  .champion-label { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: #666; }
+  .champion-name { margin-top: 12px; font-size: 20px; font-weight: bold; }
+  .success, .error {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  .success { background: #e8f7ee; color: #176b35; }
+  .error { background: #fdecec; color: #8a1f1f; }
+</style>
+</head>
+<body>
+<header>
+  <h1>NCAA D1 Lacrosse Bracket Challenge</h1>
+  <p>Make your picks. Submit your bracket. Follow the leaderboard.</p>
+</header>
+
+<section class="controls">
+  <label for="name">Your Name</label>
+  <input id="name" placeholder="Enter your name" />
+  <label for="email">Email <span style="font-weight:normal;color:#777;">optional</span></label>
+  <input id="email" type="email" placeholder="you@example.com" />
+  <div class="hint">Opening-round winners are shown as placeholders. Once those games are complete, the admin can replace them with the actual teams and all matching picks still count.</div>
+  <button class="submit" id="submitBtn" onclick="submitBracket()">Submit Bracket</button>
+  <div class="success" id="successBox">Bracket submitted!</div>
+  <div class="error" id="errorBox">Something went wrong. Check your Supabase keys or try again.</div>
+</section>
+
+<div class="scroll-note">On a phone, swipe left/right to view the full traditional bracket.</div>
+<div class="bracket-wrap"><div class="bracket" id="bracket"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // STEP 1: Create your Supabase table using the SQL in README.md.
+  // STEP 2: Replace these two values with your Supabase project values.
+  const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
+  const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+
+  let supabaseClient = null;
+  if (!SUPABASE_URL.includes("PASTE_") && !SUPABASE_ANON_KEY.includes("PASTE_")) {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+
+  const round1 = [
+    ["Seed 1", "Opening Round Winner 1"],
+    ["Seed 8", "Seed 9"],
+    ["Seed 5", "Seed 12"],
+    ["Seed 4", "Seed 13"],
+    ["Seed 6", "Seed 11"],
+    ["Seed 3", "Seed 14"],
+    ["Seed 7", "Seed 10"],
+    ["Seed 2", "Opening Round Winner 2"]
+  ];
+
+  let picks = {
+    r1: Array(8).fill(null),
+    r2: Array(4).fill(null),
+    r3: Array(2).fill(null),
+    r4: Array(1).fill(null)
+  };
+
+  function getNextRound(prevKey, size) {
+    const prev = picks[prevKey];
+    const next = [];
+    for (let i = 0; i < size; i++) {
+      next.push([prev[i * 2] || "TBD", prev[i * 2 + 1] || "TBD"]);
+    }
+    return next;
+  }
+
+  function resetFutureRounds(currentRoundIndex) {
+    const keys = ["r1", "r2", "r3", "r4"];
+    for (let i = currentRoundIndex + 1; i < keys.length; i++) {
+      picks[keys[i]] = picks[keys[i]].map(() => null);
+    }
+  }
+
+  function pickTeam(roundKey, gameIndex, team, roundIndex) {
+    if (!team || team === "TBD") return;
+    picks[roundKey][gameIndex] = team;
+    resetFutureRounds(roundIndex);
+    render();
+  }
+
+  function renderRound(title, games, key, roundIndex) {
+    const roundDiv = document.createElement("div");
+    roundDiv.className = "round";
+    roundDiv.innerHTML = `<h2>${title}</h2>`;
+
+    games.forEach((game, gameIndex) => {
+      const gameDiv = document.createElement("div");
+      gameDiv.className = "game";
+
+      game.forEach(team => {
+        const teamDiv = document.createElement("div");
+        teamDiv.className = "team";
+        if (team === "TBD") teamDiv.classList.add("disabled");
+        if (picks[key][gameIndex] === team) teamDiv.classList.add("selected");
+        teamDiv.textContent = team;
+        teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
+        gameDiv.appendChild(teamDiv);
+      });
+
+      roundDiv.appendChild(gameDiv);
+    });
+
+    return roundDiv;
+  }
+
+  function renderChampion() {
+    const div = document.createElement("div");
+    div.className = "round";
+    div.innerHTML = `
+      <h2>Champion</h2>
+      <div class="champion-card">
+        <div class="champion-label">Your Pick</div>
+        <div class="champion-name">${picks.r4[0] || "TBD"}</div>
+      </div>
+    `;
+    return div;
+  }
+
+  function render() {
+    const container = document.getElementById("bracket");
+    container.innerHTML = "";
+
+    const rounds = [
+      { title: "First Round", games: round1, key: "r1" },
+      { title: "Quarterfinals", games: getNextRound("r1", 4), key: "r2" },
+      { title: "Semifinals", games: getNextRound("r2", 2), key: "r3" },
+      { title: "Final", games: getNextRound("r3", 1), key: "r4" }
+    ];
+
+    rounds.forEach((round, index) => {
+      container.appendChild(renderRound(round.title, round.games, round.key, index));
+    });
+    container.appendChild(renderChampion());
+  }
+
+  function bracketComplete() {
+    return picks.r1.every(Boolean) && picks.r2.every(Boolean) && picks.r3.every(Boolean) && picks.r4.every(Boolean);
+  }
+
+  async function submitBracket() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const successBox = document.getElementById("successBox");
+    const errorBox = document.getElementById("errorBox");
+    const submitBtn = document.getElementById("submitBtn");
+
+    successBox.style.display = "none";
+    errorBox.style.display = "none";
+
+    if (!name) {
+      alert("Please enter your name.");
+      return;
+    }
+    if (!bracketComplete()) {
+      alert("Please complete all rounds before submitting.");
+      return;
+    }
+    if (!supabaseClient) {
+      alert("Supabase keys have not been added yet. Your bracket works locally, but submissions are not connected.");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+
+    const { error } = await supabaseClient.from("brackets").insert([{ name, email, picks }]);
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Bracket";
+
+    if (error) {
+      console.error(error);
+      errorBox.style.display = "block";
+      return;
+    }
+
+    successBox.style.display = "block";
+  }
+
+  render();
+</script>
+</body>
+</html>
