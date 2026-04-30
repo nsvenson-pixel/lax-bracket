@@ -275,7 +275,8 @@
   }
 
   if (settingsData?.lock_picks) {
-    alert("Bracket submissions are now locked.");
+    errorBox.textContent = "Bracket submissions are now locked.";
+errorBox.style.display = "block";
     return;
   }
     const name = document.getElementById("name").value.trim();
