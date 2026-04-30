@@ -273,7 +273,9 @@
     console.error(settingsError);
     return;
   }
-
+    const successBox = document.getElementById("successBox");
+    const errorBox = document.getElementById("errorBox");
+    const submitBtn = document.getElementById("submitBtn");
   if (settingsData?.lock_picks) {
     errorBox.textContent = "Bracket submissions are now locked.";
     errorBox.style.display = "block";
@@ -281,9 +283,7 @@
   }
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
-    const successBox = document.getElementById("successBox");
-    const errorBox = document.getElementById("errorBox");
-    const submitBtn = document.getElementById("submitBtn");
+
 
     successBox.style.display = "none";
     errorBox.style.display = "none";
