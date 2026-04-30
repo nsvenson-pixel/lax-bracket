@@ -141,18 +141,13 @@
   <div class="hint">Opening-round winners are shown as placeholders. Once those games are complete, the admin can replace them with the actual teams and all matching picks still count.</div>
   <button class="submit" id="submitBtn" onclick="submitBracket()">Submit Bracket</button>
  <button onclick="loadLeaderboard()">View Leaderboard</button>
- <div id="adminPanel" style="display:none;">
+<div id="adminPanel" style="display:none;">
   <hr>
   <h3>Admin</h3>
   <input id="adminPassword" type="password" placeholder="Admin password">
   <button onclick="toggleLock()">Lock / Unlock Submissions</button>
   <div id="adminStatus"></div>
 </div>
- <hr>
-<h3>Admin</h3>
-<input id="adminPassword" type="password" placeholder="Admin password">
-<button onclick="toggleLock()">Lock / Unlock Submissions</button>
-<div id="adminStatus"></div>
 <div id="leaderboard"></div>
   <div class="success" id="successBox">Bracket submitted!</div>
   <div class="error" id="errorBox">Something went wrong. Check your Supabase keys or try again.</div>
