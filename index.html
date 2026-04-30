@@ -130,7 +130,7 @@
 <body>
 <header>
   <h1>NCAA D1 Lacrosse Bracket Challenge</h1>
-  <p>Make your picks. Submit your bracket. Follow the leaderboard.</p>
+  <p>Make your picks. Submit your bracket. Follow the .</p>
 </header>
 
 <section class="controls">
@@ -141,6 +141,13 @@
   <div class="hint">Opening-round winners are shown as placeholders. Once those games are complete, the admin can replace them with the actual teams and all matching picks still count.</div>
   <button class="submit" id="submitBtn" onclick="submitBracket()">Submit Bracket</button>
  <button onclick="loadLeaderboard()">View Leaderboard</button>
+ <div id="adminPanel" style="display:none;">
+  <hr>
+  <h3>Admin</h3>
+  <input id="adminPassword" type="password" placeholder="Admin password">
+  <button onclick="toggleLock()">Lock / Unlock Submissions</button>
+  <div id="adminStatus"></div>
+</div>
  <hr>
 <h3>Admin</h3>
 <input id="adminPassword" type="password" placeholder="Admin password">
@@ -380,6 +387,8 @@ async function loadLeaderboard() {
     div.innerHTML = `<strong>${index + 1}. ${entry.name}</strong> — ${entry.score} pts`;
     container.appendChild(div);
   });
+ if (new URLSearchParams(window.location.search).get("admin") === "true") {
+  document.getElementById("adminPanel").style.display = "block";
 }
 </script>
 </body>
