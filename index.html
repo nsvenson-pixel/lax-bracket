@@ -262,6 +262,16 @@
   }
 
   async function submitBracket() {
+   const { data: settingsData } = await supabaseClient
+  .from("settings")
+  .select("*")
+  .eq("id", 1)
+  .single();
+
+if (settingsData?.lock_picks) {
+  alert("Bracket submissions are now locked.");
+  return;
+}
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const successBox = document.getElementById("successBox");
