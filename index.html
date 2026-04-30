@@ -303,40 +303,59 @@
 
   render();
 async function loadLeaderboard() {
-  const { data: brackets } = await supabaseClient
+  const { data: brackets, error: bracketError } = await supabaseClient
     .from("brackets")
     .select("*");
 
-  const { data: resultsData } = await supabaseClient
+  const { data: resultsData, error: resultsError } = await supabaseClient
     .from("results")
     .select("*")
     .eq("id", 1)
     .single();
 
+  if (bracketError || resultsError) {
+    alert("Error loading leaderboard");
+    console.error(bracketError || resultsError);
+    return;
+  }
+
   const results = resultsData?.winners || {};
 
-  const container = document.getElementById("leaderboard");
-  container.innerHTML = "<h2>Leaderboard</h2>";
+  const roundValues = {
+    r1: 2,
+    r2: 4,
+    r3: 8,
+    r4: 16
+  };
 
-  const scored = brackets.map(b => {
+  const scored = brackets.map(entry => {
     let score = 0;
 
-    for (let key in results) {
-      if (b.picks && b.picks[key] === results[key]) {
-        score += 1;
-      }
-    }
+    Object.keys(roundValues).forEach(round => {
+      const userPicks = entry.picks?.[round] || [];
+      const correctPicks = results?.[round] || [];
 
-    return { ...b, score };
+      correctPicks.forEach((winner, index) => {
+        if (userPicks[index] === winner) {
+          score += roundValues[round];
+        }
+      });
+    });
+
+    return { ...entry, score };
   });
 
   scored.sort((a, b) => b.score - a.score);
 
+  const container = document.getElementById("leaderboard");
+  container.innerHTML = "<h2>Leaderboard</h2>";
+
   scored.forEach((entry, index) => {
     const div = document.createElement("div");
-    div.innerHTML = `
-      <strong>${index + 1}. ${entry.name}</strong> — ${entry.score} pts
-    `;
+    div.style.border = "1px solid #ddd";
+    div.style.padding = "10px";
+    div.style.marginBottom = "8px";
+    div.innerHTML = `<strong>${index + 1}. ${entry.name}</strong> — ${entry.score} pts`;
     container.appendChild(div);
   });
 }
