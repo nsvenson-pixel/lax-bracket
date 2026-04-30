@@ -303,7 +303,7 @@
 
   render();
  async function loadLeaderboard() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("brackets")
     .select("*")
     .order("created_at", { ascending: true });
