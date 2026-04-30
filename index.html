@@ -141,6 +141,11 @@
   <div class="hint">Opening-round winners are shown as placeholders. Once those games are complete, the admin can replace them with the actual teams and all matching picks still count.</div>
   <button class="submit" id="submitBtn" onclick="submitBracket()">Submit Bracket</button>
  <button onclick="loadLeaderboard()">View Leaderboard</button>
+ <hr>
+<h3>Admin</h3>
+<input id="adminPassword" type="password" placeholder="Admin password">
+<button onclick="toggleLock()">Lock / Unlock Submissions</button>
+<div id="adminStatus"></div>
 <div id="leaderboard"></div>
   <div class="success" id="successBox">Bracket submitted!</div>
   <div class="error" id="errorBox">Something went wrong. Check your Supabase keys or try again.</div>
@@ -379,3 +384,39 @@ async function loadLeaderboard() {
 </script>
 </body>
 </html>
+async function toggleLock() {
+  const password = document.getElementById("adminPassword").value.trim();
+  const status = document.getElementById("adminStatus");
+
+  const { data, error } = await supabaseClient
+    .from("settings")
+    .select("*")
+    .eq("id", 1)
+    .single();
+
+  if (error) {
+    status.textContent = "Could not load settings.";
+    return;
+  }
+
+  if (password !== data.admin_password) {
+    status.textContent = "Wrong admin password.";
+    return;
+  }
+
+  const newValue = !data.lock_picks;
+
+  const { error: updateError } = await supabaseClient
+    .from("settings")
+    .update({ lock_picks: newValue })
+    .eq("id", 1);
+
+  if (updateError) {
+    status.textContent = "Could not update lock status.";
+    return;
+  }
+
+  status.textContent = newValue
+    ? "Submissions are now locked."
+    : "Submissions are now open.";
+}
