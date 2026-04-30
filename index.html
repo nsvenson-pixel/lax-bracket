@@ -389,10 +389,6 @@ async function loadLeaderboard() {
   });
  if (new URLSearchParams(window.location.search).get("admin") === "true") {
   document.getElementById("adminPanel").style.display = "block";
-}
-</script>
-</body>
-</html>
 async function toggleLock() {
   const password = document.getElementById("adminPassword").value.trim();
   const status = document.getElementById("adminStatus");
@@ -429,3 +425,6 @@ async function toggleLock() {
     ? "Submissions are now locked."
     : "Submissions are now open.";
 }
+</script>
+</body>
+</html>
