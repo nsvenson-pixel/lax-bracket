@@ -262,6 +262,22 @@
   }
 
   async function submitBracket() {
+     const { data: settingsData, error: settingsError } = await supabaseClient
+    .from("settings")
+    .select("*")
+    .eq("id", 1)
+    .single();
+
+  if (settingsError) {
+    alert("Could not check lock status.");
+    console.error(settingsError);
+    return;
+  }
+
+  if (settingsData?.lock_picks) {
+    alert("Bracket submissions are now locked.");
+    return;
+  }
    const { data: settingsData } = await supabaseClient
   .from("settings")
   .select("*")
