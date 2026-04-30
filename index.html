@@ -302,28 +302,40 @@
   }
 
   render();
- async function loadLeaderboard() {
-  const { data, error } = await supabaseClient
+async function loadLeaderboard() {
+  const { data: brackets } = await supabaseClient
     .from("brackets")
-    .select("*")
-    .order("created_at", { ascending: true });
+    .select("*");
 
-  if (error) {
-    alert("Error loading leaderboard");
-    console.error(error);
-    return;
-  }
+  const { data: resultsData } = await supabaseClient
+    .from("results")
+    .select("*")
+    .eq("id", 1)
+    .single();
+
+  const results = resultsData?.winners || {};
 
   const container = document.getElementById("leaderboard");
   container.innerHTML = "<h2>Leaderboard</h2>";
 
-  data.forEach((entry, index) => {
+  const scored = brackets.map(b => {
+    let score = 0;
+
+    for (let key in results) {
+      if (b.picks && b.picks[key] === results[key]) {
+        score += 1;
+      }
+    }
+
+    return { ...b, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+
+  scored.forEach((entry, index) => {
     const div = document.createElement("div");
-    div.style.border = "1px solid #ddd";
-    div.style.padding = "10px";
-    div.style.marginBottom = "8px";
     div.innerHTML = `
-      <strong>${index + 1}. ${entry.name}</strong>
+      <strong>${index + 1}. ${entry.name}</strong> — ${entry.score} pts
     `;
     container.appendChild(div);
   });
