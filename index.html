@@ -191,6 +191,22 @@
 .round.r4 {
   padding-top: 290px;
 } 
+ .round {
+  position: relative;
+  width: 180px;
+  height: 760px;
+}
+
+.round h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.game {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
 </style>
 </head>
 <body>
@@ -285,6 +301,7 @@
     games.forEach((game, gameIndex) => {
       const gameDiv = document.createElement("div");
       gameDiv.className = "game";
+     gameDiv.style.top = getGameTop(key, gameIndex) + "px";
 
       game.forEach(team => {
         const teamDiv = document.createElement("div");
@@ -542,6 +559,16 @@ function showBracket(picks) {
   status.textContent = newValue
     ? "Submissions are now locked."
     : "Submissions are now open.";
+}
+ function getGameTop(key, index) {
+  const positions = {
+    r1: [40, 130, 220, 310, 400, 490, 580, 670],
+    r2: [85, 265, 445, 625],
+    r3: [175, 535],
+    r4: [355]
+  };
+
+  return positions[key][index];
 }
 </script>
 </body>
