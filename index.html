@@ -237,6 +237,90 @@
 .round.r4 {
   transform: translateY(-145px);
 }
+ :root {
+  --ncaa-navy: #071d3a;
+  --ncaa-blue: #0077c8;
+  --ncaa-light-blue: #e8f3ff;
+  --ncaa-gold: #f5c542;
+  --text-dark: #111827;
+  --border: #d7dce3;
+}
+
+body {
+  background: linear-gradient(135deg, #f4f7fb 0%, #e8f3ff 100%);
+  color: var(--text-dark);
+}
+
+header {
+  background: linear-gradient(135deg, var(--ncaa-navy), #0b3d75);
+  border-bottom: 4px solid var(--ncaa-blue);
+}
+
+header h1 {
+  letter-spacing: .5px;
+}
+
+.controls {
+  border-top: 5px solid var(--ncaa-blue);
+}
+
+.submit,
+button {
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.submit {
+  background: var(--ncaa-navy);
+  color: white;
+  border: 2px solid var(--ncaa-blue);
+}
+
+.submit:hover,
+button:hover {
+  filter: brightness(.95);
+}
+
+.round h3 {
+  color: var(--ncaa-navy);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  border-bottom: 3px solid var(--ncaa-blue);
+  padding-bottom: 6px;
+}
+
+.game {
+  background: white;
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 16px rgba(7, 29, 58, .12);
+}
+
+.team {
+  border: 1px solid var(--border);
+  background: #f8fafc;
+}
+
+.team:hover {
+  background: var(--ncaa-light-blue);
+  border-color: var(--ncaa-blue);
+}
+
+.team.selected {
+  background: var(--ncaa-blue);
+  color: white;
+  border-color: var(--ncaa-navy);
+  font-weight: 700;
+}
+
+.champion {
+  border-color: var(--ncaa-navy);
+  background: white;
+  box-shadow: 0 6px 16px rgba(7, 29, 58, .18);
+}
+
+.champion div:first-child {
+  color: var(--ncaa-blue);
+}
 </style>
 </head>
 <body>
