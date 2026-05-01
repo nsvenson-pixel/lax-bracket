@@ -351,10 +351,22 @@ button:hover {
 }
 
 .round.r3 h3 {
+  visibility: hidden;
+}
+
+.bracket-wrap {
+  position: relative;
+}
+
+.bracket-wrap::after {
+  content: "Semifinals";
   position: absolute;
-  top: -60px;
+  top: 285px;
   left: 50%;
   transform: translateX(-50%);
+  color: white;
+  font-weight: 800;
+  font-size: 22px;
 }
 </style>
 </head>
