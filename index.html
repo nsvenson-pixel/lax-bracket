@@ -134,9 +134,9 @@
 }
 
 .round {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  position: relative;
+  width: 180px;
+  height: 940px;
 }
 
 .round.r1 {
@@ -560,12 +560,12 @@ function showBracket(picks) {
     ? "Submissions are now locked."
     : "Submissions are now open.";
 }
- function getGameTop(key, index) {
+function getGameTop(key, index) {
   const positions = {
-    r1: [40, 130, 220, 310, 400, 490, 580, 670],
-    r2: [85, 265, 445, 625],
-    r3: [175, 535],
-    r4: [355]
+    r1: [40, 150, 260, 370, 480, 590, 700, 810],
+    r2: [95, 315, 535, 755],
+    r3: [205, 645],
+    r4: [425]
   };
 
   return positions[key][index];
