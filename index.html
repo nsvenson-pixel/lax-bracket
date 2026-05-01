@@ -382,6 +382,7 @@ async function loadLeaderboard() {
     div.innerHTML = `<strong>${index + 1}. ${entry.name}</strong> — ${entry.score} pts`;
     container.appendChild(div);
   });
+  }
  if (new URLSearchParams(window.location.search).get("admin") === "true") {
   document.getElementById("adminPanel").style.display = "block";
   }
