@@ -289,6 +289,24 @@
     return;
   }
     const name = document.getElementById("name").value.trim();
+   // Check for duplicate name
+const { data: existing, error: nameError } = await supabaseClient
+  .from("brackets")
+  .select("id")
+  .ilike("name", name)
+  .limit(1);
+
+if (nameError) {
+  errorBox.textContent = "Error checking name.";
+  errorBox.style.display = "block";
+  return;
+}
+
+if (existing && existing.length > 0) {
+  errorBox.textContent = "That name is already taken. Please choose another.";
+  errorBox.style.display = "block";
+  return;
+}
     const email = document.getElementById("email").value.trim();
 
 
