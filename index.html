@@ -290,6 +290,11 @@
     errorBox.style.display = "block";
     return;
   }
+   if (!tiebreaker && tiebreaker !== 0) {
+  errorBox.textContent = "Please enter a championship total score tie-breaker.";
+  errorBox.style.display = "block";
+  return;
+}
     const name = document.getElementById("name").value.trim();
    // Check for duplicate name
 const { data: existing, error: nameError } = await supabaseClient
@@ -310,6 +315,7 @@ if (existing && existing.length > 0) {
   return;
 }
     const email = document.getElementById("email").value.trim();
+   const tiebreaker = parseInt(document.getElementById("tiebreaker").value, 10);
 
 
     successBox.style.display = "none";
@@ -331,7 +337,7 @@ if (existing && existing.length > 0) {
     submitBtn.disabled = true;
     submitBtn.textContent = "Submitting...";
 
-    const { error } = await supabaseClient.from("brackets").insert([{ name, email, picks }]);
+    const { error } = await supabaseClient.from("brackets").insert([{ name, email, picks, tiebreaker }]);
 
     submitBtn.disabled = false;
     submitBtn.textContent = "Submit Bracket";
