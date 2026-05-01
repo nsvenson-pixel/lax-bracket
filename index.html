@@ -279,7 +279,7 @@
 
   function renderRound(title, games, key, roundIndex) {
     const roundDiv = document.createElement("div");
-    roundDiv.className = "round";
+    roundDiv.className = `round ${key}`;
     roundDiv.innerHTML = `<h2>${title}</h2>`;
 
     games.forEach((game, gameIndex) => {
