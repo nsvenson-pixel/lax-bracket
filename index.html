@@ -384,6 +384,7 @@ async function loadLeaderboard() {
   });
  if (new URLSearchParams(window.location.search).get("admin") === "true") {
   document.getElementById("adminPanel").style.display = "block";
+  }
 async function toggleLock() {
   const password = document.getElementById("adminPassword").value.trim();
   const status = document.getElementById("adminStatus");
