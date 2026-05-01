@@ -353,6 +353,13 @@ if (existing && existing.length > 0) {
 
   render();
 async function loadLeaderboard() {
+ const { data: settingsData } = await supabaseClient
+  .from("settings")
+  .select("*")
+  .eq("id", 1)
+  .single();
+
+const isLocked = settingsData?.lock_picks;
   const { data: brackets, error: bracketError } = await supabaseClient
     .from("brackets")
     .select("*");
@@ -405,7 +412,13 @@ async function loadLeaderboard() {
     div.style.border = "1px solid #ddd";
     div.style.padding = "10px";
     div.style.marginBottom = "8px";
-    div.innerHTML = `<strong>${index + 1}. ${entry.name}</strong> — ${entry.score} pts`;
+    let html = `<strong>${index + 1}. ${entry.name}</strong> — ${entry.score} pts`;
+
+if (isLocked) {
+  html += `<br><button onclick='showBracket(${JSON.stringify(entry.picks)})'>View Bracket</button>`;
+}
+
+div.innerHTML = html;
     container.appendChild(div);
   });
   }
@@ -426,6 +439,24 @@ async function toggleLock() {
     status.textContent = "Could not load settings.";
     return;
   }
+ async function toggleLock() {
+  ...
+}  // 👈 END of function
+
+// ✅ PASTE HERE
+function showBracket(picks) {
+  let text = "Bracket Picks:\n\n";
+
+  Object.keys(picks).forEach(round => {
+    text += `${round.toUpperCase()}:\n`;
+    picks[round].forEach(p => {
+      text += `- ${p}\n`;
+    });
+    text += "\n";
+  });
+
+  alert(text);
+}
 
   if (password !== data.admin_password) {
     status.textContent = "Wrong admin password.";
