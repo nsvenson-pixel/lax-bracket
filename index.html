@@ -154,6 +154,24 @@
 .round.r4 {
   justify-content: center;
 }
+ .game {
+  margin: 20px 0;
+}
+ .round.r1 .game {
+  margin: 10px 0;
+}
+
+.round.r2 .game {
+  margin: 30px 0;
+}
+
+.round.r3 .game {
+  margin: 60px 0;
+}
+
+.round.r4 .game {
+  margin: 120px 0;
+}
 </style>
 </head>
 <body>
@@ -267,7 +285,7 @@
 
   function renderChampion() {
     const div = document.createElement("div");
-    div.className = "round";
+    div.className = "round ${key}";
     div.innerHTML = `
       <h2>Champion</h2>
       <div class="champion-card">
