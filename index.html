@@ -513,7 +513,7 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
 
   function renderChampion() {
     const div = document.createElement("div");
-    div.className = "round ${key}";
+  div.className = "round champion-round";
     div.innerHTML = `
       <h2>Champion</h2>
       <div class="champion-card">
