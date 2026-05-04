@@ -463,11 +463,16 @@ function getTextColor(bgColor) {
   }
 
   function pickTeam(roundKey, gameIndex, team, roundIndex) {
-    if (!team || team === "TBD") return;
-    picks[roundKey][gameIndex] = team;
+  if (!team || team === "TBD") return;
+
+  picks[roundKey][gameIndex] = team;
+
+  if (roundKey !== "r4") {
     resetFutureRounds(roundIndex);
-    render();
   }
+
+  render();
+}
 
   function renderRound(title, games, key, roundIndex) {
     const roundDiv = document.createElement("div");
