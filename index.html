@@ -401,16 +401,34 @@ button:hover {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   }
 
-  const round1 = [
-    ["Seed 1", "Opening Round Winner 1"],
-    ["Seed 8", "Seed 9"],
-    ["Seed 5", "Seed 12"],
-    ["Seed 4", "Seed 13"],
-    ["Seed 6", "Seed 11"],
-    ["Seed 3", "Seed 14"],
-    ["Seed 7", "Seed 10"],
-    ["Seed 2", "Opening Round Winner 2"]
-  ];
+  let round1 = [
+  ["Princeton", "Stony Brook / Marist"],
+  ["Penn State", "Army"],
+  ["Richmond", "Duke"],
+  ["Virginia", "Georgetown"],
+  ["North Carolina", "UAlbany"],
+  ["Syracuse", "Yale"],
+  ["Cornell", "Johns Hopkins"],
+  ["Jacksonville / RMU", "Notre Dame"]
+];
+ const teamColors = {
+  "Princeton": "#f36f21",
+  "Stony Brook / Marist": "#b31b1b",
+  "Penn State": "#1e407c",
+  "Army": "#b7a57a",
+  "Richmond": "#990000",
+  "Duke": "#003087",
+  "Virginia": "#232d4b",
+  "Georgetown": "#041e42",
+  "North Carolina": "#7BAFD4",
+  "UAlbany": "#46166b",
+  "Syracuse": "#f76900",
+  "Yale": "#00356b",
+  "Cornell": "#b31b1b",
+  "Johns Hopkins": "#68ace5",
+  "Jacksonville / RMU": "#004b4f",
+  "Notre Dame": "#0c2340"
+};
 
   let picks = {
     r1: Array(8).fill(null),
@@ -458,7 +476,14 @@ button:hover {
         if (team === "TBD") teamDiv.classList.add("disabled");
         if (picks[key][gameIndex] === team) teamDiv.classList.add("selected");
         teamDiv.textContent = team;
-        teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
+
+if (teamColors[team]) {
+  teamDiv.style.background = teamColors[team];
+  teamDiv.style.color = "white";
+  teamDiv.style.fontWeight = "800";
+}
+
+teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
         gameDiv.appendChild(teamDiv);
       });
 
