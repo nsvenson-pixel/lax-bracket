@@ -429,7 +429,16 @@ button:hover {
   "Jacksonville / RMU": "#004b4f",
   "Notre Dame": "#0c2340"
 };
+function getTextColor(bgColor) {
+  const color = bgColor.replace("#", "");
+  const r = parseInt(color.substring(0, 2), 16);
+  const g = parseInt(color.substring(2, 4), 16);
+  const b = parseInt(color.substring(4, 6), 16);
 
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+  return brightness > 140 ? "#111" : "#ffffff";
+}
   let picks = {
     r1: Array(8).fill(null),
     r2: Array(4).fill(null),
@@ -471,18 +480,16 @@ button:hover {
      gameDiv.style.top = getGameTop(key, gameIndex) + "px";
 
       game.forEach(team => {
-        const teamDiv = document.createElement("div");
-        teamDiv.className = "team";
-        if (team === "TBD") teamDiv.classList.add("disabled");
-        if (picks[key][gameIndex] === team) teamDiv.classList.add("selected");
-        teamDiv.textContent = team;
+       const teamDiv = document.createElement("div");
+teamDiv.className = "team";
+teamDiv.textContent = team;
 
 if (teamColors[team]) {
-  teamDiv.style.background = teamColors[team];
-  teamDiv.style.color = "white";
+  const bg = teamColors[team];
+  teamDiv.style.background = bg;
+  teamDiv.style.color = getTextColor(bg);
   teamDiv.style.fontWeight = "800";
 }
-
 teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
         gameDiv.appendChild(teamDiv);
       });
