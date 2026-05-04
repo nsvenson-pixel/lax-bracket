@@ -569,6 +569,7 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
     errorBox.style.display = "block";
     return;
   }
+   const tiebreaker = parseInt(document.getElementById("tiebreaker").value, 10);
    if (!tiebreaker && tiebreaker !== 0) {
   errorBox.textContent = "Please enter a championship total score tie-breaker.";
   errorBox.style.display = "block";
@@ -594,7 +595,7 @@ if (existing && existing.length > 0) {
   return;
 }
     const email = document.getElementById("email").value.trim();
-   const tiebreaker = parseInt(document.getElementById("tiebreaker").value, 10);
+   
 
 
     successBox.style.display = "none";
