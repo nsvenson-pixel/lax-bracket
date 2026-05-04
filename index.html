@@ -490,6 +490,9 @@ if (teamColors[team]) {
   teamDiv.style.color = getTextColor(bg);
   teamDiv.style.fontWeight = "800";
 }
+if (team === "Notre Dame") {
+  teamDiv.style.color = "#C99700"; // ND gold
+}
 teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
         gameDiv.appendChild(teamDiv);
       });
