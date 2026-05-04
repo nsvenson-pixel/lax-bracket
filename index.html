@@ -528,6 +528,12 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
       { title: "Second Round", games: getNextRound("r1", 4), key: "r2" },
       { title: "Semifinals", games: getNextRound("r2", 2), key: "r3" },
       { title: "Final", games: getNextRound("r3", 1), key: "r4" }
+     const champ = picks["r4"]?.[0];
+const champEl = document.getElementById("championPick");
+
+if (champEl) {
+  champEl.textContent = champ || "TBD";
+}
     ];
 
     rounds.forEach((round, index) => {
