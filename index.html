@@ -567,6 +567,13 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
     .select("*")
     .eq("id", 1)
     .single();
+   if (error) {
+  errorBox.textContent = "Error submitting bracket.";
+  errorBox.style.display = "block";
+  return;
+}
+
+localStorage.setItem("myBracketId", data.id);
 
   if (settingsError) {
     alert("Could not check lock status.");
