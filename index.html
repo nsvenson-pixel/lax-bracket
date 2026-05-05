@@ -562,15 +562,100 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
   }
 
   async function submitBracket() {
-     const { data: settingsData, error: settingsError } = await supabaseClient
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const tiebreaker = parseInt(document.getElementById("tiebreaker").value, 10);
+
+  const successBox = document.getElementById("successBox");
+  const errorBox = document.getElementById("errorBox");
+  const submitBtn = document.getElementById("submitBtn");
+
+  successBox.style.display = "none";
+  errorBox.style.display = "none";
+
+  const { data: settingsData, error: settingsError } = await supabaseClient
     .from("settings")
     .select("*")
     .eq("id", 1)
     .single();
-   if (settingsError) {
-  errorBox.textContent = "Error submitting bracket.";
-  errorBox.style.display = "block";
-  return;
+
+  if (settingsError) {
+    errorBox.textContent = "Could not check lock status.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  if (settingsData?.lock_picks) {
+    errorBox.textContent = "Bracket submissions are now locked.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  if (!name) {
+    errorBox.textContent = "Please enter your name.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  if (!tiebreaker && tiebreaker !== 0) {
+    errorBox.textContent = "Please enter a championship total score tie-breaker.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  if (!bracketComplete()) {
+    errorBox.textContent = "Please complete all rounds before submitting.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  const { data: existing, error: nameError } = await supabaseClient
+    .from("brackets")
+    .select("id")
+    .ilike("name", name)
+    .limit(1);
+
+  if (nameError) {
+    errorBox.textContent = "Error checking name.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  if (existing && existing.length > 0) {
+    errorBox.textContent = "That name is already taken. Please choose another.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  const { data, error } = await supabaseClient
+    .from("brackets")
+    .insert([
+      {
+        name,
+        email,
+        picks,
+        tiebreaker
+      }
+    ])
+    .select()
+    .single();
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Submit Bracket";
+
+  if (error) {
+    console.error(error);
+    errorBox.textContent = "Error submitting bracket.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  localStorage.setItem("myBracketId", data.id);
+  successBox.textContent = "Bracket submitted!";
+  successBox.style.display = "block";
 }
 
 localStorage.setItem("myBracketId", data.id);
