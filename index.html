@@ -658,8 +658,6 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
   successBox.style.display = "block";
 }
 
-localStorage.setItem("myBracketId", data.id);
-
   if (settingsError) {
     alert("Could not check lock status.");
     console.error(settingsError);
