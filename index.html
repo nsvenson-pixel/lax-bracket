@@ -389,6 +389,8 @@ button:hover {
   <div class="hint">Opening-round winners are shown as placeholders. Once those games are complete, the admin can replace them with the actual teams and all matching picks still count.</div>
   <button class="submit" id="submitBtn" onclick="submitBracket()">Submit Bracket</button>
  <button onclick="loadLeaderboard()">View Leaderboard</button>
+ <button onclick="viewMyBracket()">View My Bracket</button>
+<div id="myBracketBox"></div>
 <div id="adminPanel" style="display:none;">
   <hr>
   <h3>Admin</h3>
@@ -627,17 +629,18 @@ if (existing && existing.length > 0) {
     submitBtn.disabled = true;
     submitBtn.textContent = "Submitting...";
 
-    const { error } = await supabaseClient.from("brackets").insert([{ name, email, picks, tiebreaker }]);
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit Bracket";
-
-    if (error) {
-      console.error(error);
-      errorBox.style.display = "block";
-      return;
+    const { data, error } = await supabaseClient
+  .from("brackets")
+  .insert([
+    {
+      name,
+      email,
+      picks,
+      tiebreaker
     }
-
+  ])
+  .select()
+  .single();
     successBox.style.display = "block";
   }
 
@@ -776,6 +779,40 @@ function getGameTop(key, index) {
   };
 
   return positions[key][index];
+}
+ async function viewMyBracket() {
+  const id = localStorage.getItem("myBracketId");
+  const box = document.getElementById("myBracketBox");
+
+  if (!id) {
+    box.innerHTML = "<p>No saved bracket found on this device.</p>";
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("brackets")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) {
+    box.innerHTML = "<p>Could not load your bracket.</p>";
+    return;
+  }
+
+  const picks = data.picks;
+
+  let html = `<h3>${data.name}'s Bracket</h3>`;
+
+  Object.keys(picks).forEach(round => {
+    html += `<strong>${round.toUpperCase()}</strong><ul>`;
+    picks[round].forEach(team => {
+      html += `<li>${team}</li>`;
+    });
+    html += `</ul>`;
+  });
+
+  box.innerHTML = html;
 }
 </script>
 </body>
