@@ -567,7 +567,7 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
     .select("*")
     .eq("id", 1)
     .single();
-   if (error) {
+   if (settingsError) {
   errorBox.textContent = "Error submitting bracket.";
   errorBox.style.display = "block";
   return;
