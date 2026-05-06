@@ -411,18 +411,6 @@ button:hover {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script
- const SITE_PASSWORD = "lacrosse2026";
-
-if (sessionStorage.getItem("siteUnlocked") !== "true") {
-  const entered = prompt("Enter password to access the bracket:");
-
-  if (entered === SITE_PASSWORD) {
-    sessionStorage.setItem("siteUnlocked", "true");
-  } else {
-    document.body.innerHTML = "<h2 style='text-align:center;margin-top:80px;'>Access denied.</h2>";
-    throw new Error("Access denied");
-  }
-}
 
   const SUPABASE_URL = "https://wethaeginnqylefyiluw.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndldGhhZWdpbm5xeWxlZnlpbHV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0OTMyODAsImV4cCI6MjA5MzA2OTI4MH0.N-IXAfHpXJVDzQB3tHIZdTk3S-k038w8qnL3yxtWiR0";
