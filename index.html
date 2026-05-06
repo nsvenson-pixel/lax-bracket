@@ -527,8 +527,7 @@ function pickTeam(roundKey, gameIndex, team, roundIndex) {
 teamDiv.className = "team";
 teamDiv.textContent = team;
 
-if (teamColors[team]) {
-  const baseTeam = getBaseTeamName(team);
+const baseTeam = getBaseTeamName(team);
 
 if (teamColors[baseTeam]) {
   const bg = teamColors[baseTeam];
