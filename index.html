@@ -772,22 +772,20 @@ async function toggleLock() {
     status.textContent = "Could not load settings.";
     return;
   }
- async function toggleLock() {
-}  
+async function toggleLock() {
+  const password = document.getElementById("adminPassword").value.trim();
+  const status = document.getElementById("adminStatus");
 
-function showBracket(picks) {
-  let text = "Bracket Picks:\n\n";
+  const { data, error } = await supabaseClient
+    .from("settings")
+    .select("*")
+    .eq("id", 1)
+    .single();
 
-  Object.keys(picks).forEach(round => {
-    text += `${round.toUpperCase()}:\n`;
-    picks[round].forEach(p => {
-      text += `- ${p}\n`;
-    });
-    text += "\n";
-  });
-
-  alert(text);
-}
+  if (error) {
+    status.textContent = "Could not load settings.";
+    return;
+  }
 
   if (password !== data.admin_password) {
     status.textContent = "Wrong admin password.";
@@ -809,6 +807,20 @@ function showBracket(picks) {
   status.textContent = newValue
     ? "Submissions are now locked."
     : "Submissions are now open.";
+}
+
+function showBracket(picks) {
+  let text = "Bracket Picks:\n\n";
+
+  Object.keys(picks).forEach(round => {
+    text += `${round.toUpperCase()}:\n`;
+    picks[round].forEach(p => {
+      text += `- ${p}\n`;
+    });
+    text += "\n";
+  });
+
+  alert(text);
 }
 function getGameTop(key, index) {
   const positions = {
