@@ -474,6 +474,9 @@ function getTextColor(bgColor) {
 
   return brightness > 140 ? "#111" : "#ffffff";
 }
+ function getBaseTeamName(team) {
+  return team.replace(/^\d+\s+/, "");
+}
   let picks = {
     r1: Array(8).fill(null),
     r2: Array(4).fill(null),
@@ -525,15 +528,20 @@ teamDiv.className = "team";
 teamDiv.textContent = team;
 
 if (teamColors[team]) {
-  const bg = teamColors[team];
+  const baseTeam = getBaseTeamName(team);
+
+if (teamColors[baseTeam]) {
+  const bg = teamColors[baseTeam];
   teamDiv.style.background = bg;
   teamDiv.style.color = getTextColor(bg);
   teamDiv.style.fontWeight = "800";
 }
-if (team === "Notre Dame") {
-  teamDiv.style.color = "#C99700"; // ND gold
+
+if (baseTeam === "Notre Dame") {
+  teamDiv.style.color = "#C99700";
 }
-if (team === "Virginia") {
+
+if (baseTeam === "Virginia") {
   teamDiv.style.color = "#F84C1E";
 }
 teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
