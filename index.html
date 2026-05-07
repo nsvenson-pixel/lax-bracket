@@ -772,20 +772,6 @@ async function toggleLock() {
     status.textContent = "Could not load settings.";
     return;
   }
-async function toggleLock() {
-  const password = document.getElementById("adminPassword").value.trim();
-  const status = document.getElementById("adminStatus");
-
-  const { data, error } = await supabaseClient
-    .from("settings")
-    .select("*")
-    .eq("id", 1)
-    .single();
-
-  if (error) {
-    status.textContent = "Could not load settings.";
-    return;
-  }
 
   if (password !== data.admin_password) {
     status.textContent = "Wrong admin password.";
