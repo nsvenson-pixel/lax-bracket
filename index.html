@@ -384,21 +384,6 @@ button:hover {
 </head>
 <body>
 
-<script>
-  const SITE_PASSWORD = "lacrosse2026";
-
-  if (sessionStorage.getItem("siteUnlocked") !== "true") {
-    const entered = prompt("Enter password:");
-
-    if (entered === SITE_PASSWORD) {
-      sessionStorage.setItem("siteUnlocked", "true");
-    } else {
-      document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px;'>Access denied</h2>";
-      throw new Error("Access denied");
-    }
-  }
-</script>
-
 <header>
  <header>
   <img src="/logo.png" class="ncaa-logo" />
