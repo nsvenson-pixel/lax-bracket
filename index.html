@@ -395,9 +395,16 @@ button:hover {
 <section class="controls">
   <label for="name">Your Name</label>
   <input id="name" placeholder="Enter your name" />
-  <label for="email">Email <span style="font-weight:normal;color:#777;"></span></label>
-  <input id="email" type="email" placeholder="you@example.com" />
- <label for="tiebreaker">Championship Total Score Tie-Breaker</label>
+ <label for="email">Email <span style="font-weight:normal;color:#777;"></span></label>
+<input id="email" type="email" placeholder="you@example.com" />
+
+<label for="group">Group</label>
+<select id="group">
+  <option value="Friends">Friends</option>
+  <option value="Parents">Parents</option>
+</select>
+
+<label for="tiebreaker">Championship Total Score Tie-Breaker</label>
 <input id="tiebreaker" type="number" placeholder="Championship Total Score Tie-Breaker. Example: 24" />
   <div class="hint">Opening-round winners are shown as placeholders. Once those games are complete, the admin can replace them with the actual teams and all matching picks still count.</div>
  <div class="scoring">
@@ -653,16 +660,19 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
   submitBtn.disabled = true;
   submitBtn.textContent = "Submitting...";
 
-  const { data, error } = await supabaseClient
-    .from("brackets")
-    .insert([
-      {
-        name,
-        email,
-        picks,
-        tiebreaker
-      }
-    ])
+  const group = document.getElementById("group").value;
+
+const { data, error } = await supabaseClient
+  .from("brackets")
+  .insert([
+    {
+      name,
+      email,
+      group_name: group,
+      picks,
+      tiebreaker
+    }
+  ])
     .select()
     .single();
 
@@ -682,7 +692,7 @@ teamDiv.onclick = () => pickTeam(key, gameIndex, team, roundIndex);
 }
 
   render();
-async function loadLeaderboard() {
+async function loadLeaderboard(groupName) {
  const { data: settingsData } = await supabaseClient
   .from("settings")
   .select("*")
@@ -691,8 +701,9 @@ async function loadLeaderboard() {
 
 const isLocked = settingsData?.lock_picks;
   const { data: brackets, error: bracketError } = await supabaseClient
-    .from("brackets")
-    .select("*");
+.from("brackets")
+.select("*")
+.eq("group_name", groupName);
 
   const { data: resultsData, error: resultsError } = await supabaseClient
     .from("results")
