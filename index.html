@@ -482,12 +482,21 @@ function getTextColor(bgColor) {
  function getBaseTeamName(team) {
   return team.replace(/^\d+\s+/, "");
 }
-  let picks = {
-    r1: Array(8).fill(null),
-    r2: Array(4).fill(null),
-    r3: Array(2).fill(null),
-    r4: Array(1).fill(null)
-  };
+ let picks = {
+  r1: [
+    null,
+    "8 Penn State",
+    "Duke",
+    null,
+    "3 North Carolina",
+    null,
+    "Johns Hopkins",
+    "2 Notre Dame"
+  ],
+  r2: Array(4).fill(null),
+  r3: Array(2).fill(null),
+  r4: Array(1).fill(null)
+};
 
   function getNextRound(prevKey, size) {
     const prev = picks[prevKey];
