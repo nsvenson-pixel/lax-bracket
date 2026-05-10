@@ -380,15 +380,29 @@ button:hover {
  #myBracketBox {
   color: #111827;
 }
- #leaderboard {
+#leaderboard {
   max-width: 900px;
-  margin: 16px auto;
+  margin: 12px auto;
+  padding: 10px;
+  font-size: 13px;
+}
+
+#leaderboard h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
 }
 
 #leaderboard .leaderboard-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px 12px;
+  gap: 6px 10px;
+}
+
+#leaderboard .leaderboard-list div {
+  padding: 6px !important;
+  margin-bottom: 0 !important;
+  font-size: 13px;
+  line-height: 1.2;
 }
 
 @media (max-width: 700px) {
