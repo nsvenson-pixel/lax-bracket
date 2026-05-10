@@ -380,6 +380,22 @@ button:hover {
  #myBracketBox {
   color: #111827;
 }
+ #leaderboard {
+  max-width: 900px;
+  margin: 16px auto;
+}
+
+#leaderboard .leaderboard-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+@media (max-width: 700px) {
+  #leaderboard .leaderboard-list {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 <body>
@@ -756,7 +772,8 @@ const isLocked = settingsData?.lock_picks;
   scored.sort((a, b) => b.score - a.score);
 
   const container = document.getElementById("leaderboard");
-  container.innerHTML = "<h2>Leaderboard</h2>";
+  container.innerHTML = "<h2>Leaderboard</h2><div class='leaderboard-list'></div>";
+const list = container.querySelector(".leaderboard-list");
 
   scored.forEach((entry, index) => {
     const div = document.createElement("div");
@@ -770,7 +787,7 @@ if (isLocked) {
 }
 
 div.innerHTML = html;
-    container.appendChild(div);
+  list.appendChild(div);
   });
   }
  if (new URLSearchParams(window.location.search).get("admin") === "true") {
