@@ -497,7 +497,7 @@ function getTextColor(bgColor) {
   r3: Array(2).fill(null),
   r4: Array(1).fill(null)
 };
-
+const defaultPicks = JSON.parse(JSON.stringify(picks));
   function getNextRound(prevKey, size) {
     const prev = picks[prevKey];
     const next = [];
@@ -833,14 +833,11 @@ function showBracket(savedPicks) {
 }
 
 function returnToMyBracket() {
-  if (currentViewingPicks) {
-    picks = currentViewingPicks;
-    currentViewingPicks = null;
-    render();
+  picks = JSON.parse(JSON.stringify(defaultPicks));
+  render();
 
-    const btn = document.getElementById("returnBracketBtn");
-    if (btn) btn.remove();
-  }
+  const btn = document.getElementById("returnBracketBtn");
+  if (btn) btn.remove();
 }
 function getGameTop(key, index) {
   const positions = {
