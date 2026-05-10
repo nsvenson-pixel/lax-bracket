@@ -813,18 +813,34 @@ async function toggleLock() {
     : "Submissions are now open.";
 }
 
-function showBracket(picks) {
-  let text = "Bracket Picks:\n\n";
+let currentViewingPicks = null;
 
-  Object.keys(picks).forEach(round => {
-    text += `${round.toUpperCase()}:\n`;
-    picks[round].forEach(p => {
-      text += `- ${p}\n`;
-    });
-    text += "\n";
-  });
+function showBracket(savedPicks) {
+  currentViewingPicks = JSON.parse(JSON.stringify(picks));
 
-  alert(text);
+  picks = JSON.parse(JSON.stringify(savedPicks));
+
+  render();
+
+  const container = document.getElementById("leaderboard");
+
+  if (!document.getElementById("returnBracketBtn")) {
+    container.insertAdjacentHTML(
+      "afterbegin",
+      `<button id="returnBracketBtn" onclick="returnToMyBracket()">Return To Current Bracket</button><br><br>`
+    );
+  }
+}
+
+function returnToMyBracket() {
+  if (currentViewingPicks) {
+    picks = currentViewingPicks;
+    currentViewingPicks = null;
+    render();
+
+    const btn = document.getElementById("returnBracketBtn");
+    if (btn) btn.remove();
+  }
 }
 function getGameTop(key, index) {
   const positions = {
