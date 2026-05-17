@@ -423,31 +423,18 @@ button:hover {
 </header>
 
 <section class="controls">
-  <label for="name">Your Name</label>
-  <input id="name" placeholder="Enter your name" />
- <label for="email">Email <span style="font-weight:normal;color:#777;"></span></label>
-<input id="email" type="email" placeholder="you@example.com" />
 
-
-<label for="tiebreaker">Championship Total Score Tie-Breaker</label>
-<input id="tiebreaker" type="number" placeholder="Championship Total Score Tie-Breaker. Example: 24" />
-  <div class="hint">Opening-round winners are shown as placeholders. Once those games are complete, the admin can replace them with the actual teams and all matching picks still count.</div>
- <div class="scoring">
+<div class="scoring">
   Scoring: Round 1 = 2 pts • Quarterfinals = 4 pts • Semifinals = 8 pts • Championship = 16 pts
-</div> 
- <button class="submit" id="submitBtn" onclick="submitBracket()">Submit Bracket</button>
-<button onclick="loadLeaderboard('1')">Group 1 Leaderboard</button>
-<button onclick="loadLeaderboard('2')">Group 2 Leaderboard</button>
-<div id="adminPanel" style="display:none;">
-  <hr>
-  <h3>Admin</h3>
-  <input id="adminPassword" type="password" placeholder="Admin password">
-  <button onclick="toggleLock()">Lock / Unlock Submissions</button>
-  <div id="adminStatus"></div>
 </div>
+
+<div style="text-align:center; margin-top:14px;">
+  <button onclick="loadLeaderboard('1')">Group 1 Leaderboard</button>
+  <button onclick="loadLeaderboard('2')">Group 2 Leaderboard</button>
+</div>
+
 <div id="leaderboard"></div>
-  <div class="success" id="successBox">Bracket submitted!</div>
-  <div class="error" id="errorBox">Something went wrong. Check your Supabase keys or try again.</div>
+
 </section>
 
 <div class="scroll-note">On a phone, swipe left/right to view the full traditional bracket.</div>
